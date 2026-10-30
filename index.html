@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Memahami Teks Rekon - Bahasa Indonesia Kelas IX</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Poppins & Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for Quiz Effects -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#2563EB',
+                            darkblue: '#1E3A8A',
+                            purple: '#7C3AED',
+                            yellow: '#F59E0B',
+                            accent: '#10B981',
+                            bg: '#F3F4F6'
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['Poppins', 'sans-serif'],
+                        body: ['Nunito', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f3f4f6;
+        }
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Poppins', sans-serif;
+        }
+        /* Glassmorphism Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #7C3AED;
+            border-radius: 4px;
+        }
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+        .tab-btn.active {
+            background-color: #7C3AED;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(124, 58, 237, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-purple-200 selection:text-purple-900">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-50 bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand Title -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateTo('home')">
+                    <div class="bg-yellow-400 text-blue-900 p-2 rounded-xl shadow-md">
+                        <i class="fa-solid me-0 fa-compass-drafting text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="font-heading font-extrabold text-lg sm:text-xl tracking-wide block leading-tight">TEKS REKON</span>
+                        <span class="text-xs text-yellow-300 font-semibold tracking-wider uppercase">Kelas IX / Fase D</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Menu -->
+                <nav class="hidden md:flex space-x-1 lg:space-x-2">
+                    <button onclick="navigateTo('home')" class="nav-link px-3 py-2 rounded-lg text-sm font-semibold hover:bg-white/10 transition flex items-center gap-1.5"><i class="fa-solid fa-house"></i> Beranda</button>
+                    <button onclick="navigateTo('identitas')" class="nav-link px-3 py-2 rounded-lg text-sm font-semibold hover:bg-white/10 transition flex items-center gap-1.5"><i class="fa-solid fa-bullseye"></i> Tujuan & CP</button>
+                    <button onclick="navigateTo('materi')" class="nav-link px-3 py-2 rounded-lg text-sm font-semibold hover:bg-white/10 transition flex items-center gap-1.5"><i class="fa-solid fa-book-open"></i> Materi</button>
+                    <button onclick="navigateTo('aktivitas')" class="nav-link px-3 py-2 rounded-lg text-sm font-semibold hover:bg-white/10 transition flex items-center gap-1.5"><i class="fa-solid fa-gamepad"></i> Simulasi</button>
+                    <button onclick="navigateTo('kuis')" class="nav-link px-3 py-2 rounded-lg text-sm font-semibold hover:bg-white/10 transition flex items-center gap-1.5"><i class="fa-solid fa-square-check"></i> Kuis Evaluasi</button>
+                    <button onclick="navigateTo('penulis')" class="nav-link px-3 py-2 rounded-lg text-sm font-semibold hover:bg-white/10 transition flex items-center gap-1.5"><i class="fa-solid fa-pen-nib"></i> Studio Rekon</button>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-white hover:text-yellow-300 focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-indigo-900 border-t border-indigo-800 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="navigateTo('home')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-white hover:bg-indigo-800 flex items-center gap-2"><i class="fa-solid fa-house w-5"></i> Beranda</button>
+            <button onclick="navigateTo('identitas')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-white hover:bg-indigo-800 flex items-center gap-2"><i class="fa-solid fa-bullseye w-5"></i> Tujuan & CP</button>
+            <button onclick="navigateTo('materi')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-white hover:bg-indigo-800 flex items-center gap-2"><i class="fa-solid fa-book-open w-5"></i> Materi Pembelajaran</button>
+            <button onclick="navigateTo('aktivitas')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-white hover:bg-indigo-800 flex items-center gap-2"><i class="fa-solid fa-gamepad w-5"></i> Simulasi Interaktif</button>
+            <button onclick="navigateTo('kuis')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-white hover:bg-indigo-800 flex items-center gap-2"><i class="fa-solid fa-square-check w-5"></i> Kuis Evaluasi</button>
+            <button onclick="navigateTo('penulis')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-white hover:bg-indigo-800 flex items-center gap-2"><i class="fa-solid fa-pen-nib w-5"></i> Studio Rekon (Menulis)</button>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- ================= HALAMAN HOME / BERANDA ================= -->
+        <section id="section-home" class="space-y-8 animate-fade">
+            <!-- Hero Banner -->
+            <div class="relative bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 rounded-3xl p-6 sm:p-10 text-white overflow-hidden shadow-xl">
+                <!-- Background decorative elements -->
+                <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-yellow-400 rounded-full opacity-20 blur-2xl"></div>
+                <div class="absolute top-0 right-1/4 w-32 h-32 bg-purple-400 rounded-full opacity-20 blur-xl"></div>
+                
+                <div class="relative z-10 grid md:grid-cols-12 gap-6 items-center">
+                    <div class="md:col-span-7 space-y-4">
+                        <span class="inline-block bg-yellow-400 text-blue-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow">Media Pembelajaran Interaktif (MPI)</span>
+                        <h1 class="text-3xl sm:text-5xl font-extrabold leading-tight">Petualangan Menjelajahi Masa Lalu!</h1>
+                        <p class="text-slate-100 text-base sm:text-lg leading-relaxed">
+                            Merekam jejak sejarah, peristiwa penting, dan pengalaman berharga melalui pemahaman <strong>Teks Rekon (Recount Text)</strong>.
+                        </p>
+                        <div class="pt-2 flex flex-wrap gap-3">
+                            <button onclick="navigateTo('materi')" class="bg-yellow-400 hover:bg-yellow-300 text-blue-950 font-bold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                                <i class="fa-solid fa-rocket"></i> Mulai Petualangan
+                            </button>
+                            <button onclick="navigateTo('identitas')" class="bg-white/20 hover:bg-white/30 text-white font-semibold px-5 py-3 rounded-xl border border-white/30 backdrop-blur transition flex items-center gap-2">
+                                <i class="fa-solid fa-circle-info"></i> Info Kurikulum
+                            </button>
+                        </div>
+                    </div>
+                    <div class="md:col-span-5 flex justify-center">
+                        <div class="relative animate-float text-center">
+                            <div class="text-9xl text-yellow-300 drop-shadow-2xl">
+                                <i class="fa-solid fa-hourglass-half"></i>
+                            </div>
+                            <div class="mt-4 bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-xl text-xs sm:text-sm font-semibold">
+                                <i class="fa-solid fa-compass text-yellow-400 mr-1"></i> Rekon Pribadi • Faktual • Imaginatif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Navigation Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div onclick="navigateTo('materi')" class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition border border-slate-100 cursor-pointer group hover:-translate-y-1">
+                    <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-2xl font-bold mb-4 group-hover:bg-blue-600 group-hover:text-white transition">
+                        <i class="fa-solid fa-book"></i>
+                    </div>
+                    <h3 class="font-heading text-xl font-bold text-slate-800 mb-2">Materi Lengkap</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Pelajari pengertian, tujuan, jenis-jenis, struktur, hingga kaidah kebahasaan teks rekon secara sistematis.</p>
+                    <div class="mt-4 text-blue-600 font-bold text-sm flex items-center gap-1 group-hover:translate-x-1 transition">
+                        Buka Materi <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div onclick="navigateTo('aktivitas')" class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition border border-slate-100 cursor-pointer group hover:-translate-y-1">
+                    <div class="w-14 h-14 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center text-2xl font-bold mb-4 group-hover:bg-purple-600 group-hover:text-white transition">
+                        <i class="fa-solid fa-puzzle-piece"></i>
+                    </div>
+                    <h3 class="font-heading text-xl font-bold text-slate-800 mb-2">Simulasi Interaktif</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Uji pemahamanmu lewat aktivitas seret-lepas (drag & drop) struktur teks dan analisis peristiwa sejarah.</p>
+                    <div class="mt-4 text-purple-600 font-bold text-sm flex items-center gap-1 group-hover:translate-x-1 transition">
+                        Mulai Simulasi <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div onclick="navigateTo('penulis')" class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition border border-slate-100 cursor-pointer group hover:-translate-y-1">
+                    <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl font-bold mb-4 group-hover:bg-emerald-600 group-hover:text-white transition">
+                        <i class="fa-solid fa-pen-fancy"></i>
+                    </div>
+                    <h3 class="font-heading text-xl font-bold text-slate-800 mb-2">Studio Menulis</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Praktikkan ilmu dengan menyusun teks rekon pengalaman pribadimu secara terbimbing!</p>
+                    <div class="mt-4 text-emerald-600 font-bold text-sm flex items-center gap-1 group-hover:translate-x-1 transition">
+                        Tulis Teks <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= HALAMAN IDENTITAS & TUJUAN ================= -->
+        <section id="section-identitas" class="hidden space-y-6">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-slate-200">
+                <div class="border-b pb-4 mb-6">
+                    <h2 class="text-2xl sm:text-3xl font-heading font-bold text-indigo-900 flex items-center gap-3">
+                        <i class="fa-solid fa-graduation-cap text-yellow-500"></i> Identitas & Tujuan Pembelajaran
+                    </h2>
+                    <p class="text-slate-500 text-sm mt-1">Kurikulum Merdeka - Bahasa Indonesia Fase D / Kelas IX</p>
+                </div>
+
+                <!-- Identity Grid -->
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 space-y-3">
+                        <h3 class="font-heading font-bold text-blue-900 text-lg border-b border-blue-200 pb-2">
+                            <i class="fa-solid fa-id-card text-blue-600 mr-2"></i> Identitas Modul
+                        </h3>
+                        <ul class="space-y-2 text-sm text-slate-700">
+                            <li><strong>Mata Pelajaran:</strong> Bahasa Indonesia</li>
+                            <li><strong>Fase / Kelas:</strong> Fase D / Kelas IX (Sembilan)</li>
+                            <li><strong>Materi Pokok:</strong> Teks Rekon (Recount Text)</li>
+                            <li><strong>Topik Utama:</strong> Memahami, Menganalisis, & Menyusun Teks Rekon</li>
+                            <li><strong>Sasaran Peserta:</strong> Peserta Didik SMP / MTs</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-purple-50 border border-purple-200 rounded-xl p-5 space-y-3">
+                        <h3 class="font-heading font-bold text-purple-900 text-lg border-b border-purple-200 pb-2">
+                            <i class="fa-solid fa-award text-purple-600 mr-2"></i> Capaian Pembelajaran (CP)
+                        </h3>
+                        <p class="text-sm text-slate-700 leading-relaxed">
+                            Peserta didik mampu menganalisis, mengevaluasi, dan menyampaikan gagasan dari berbagai jenis teks (termasuk teks rekon) dengan memperhatikan struktur, kaidah kebahasaan, serta konteks peristiwa secara kritis dan kreatif.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Learning Objectives -->
+                <div>
+                    <h3 class="font-heading font-bold text-slate-800 text-xl mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-indigo-600"></i> Tujuan Pembelajaran (TP)
+                    </h3>
+                    <div class="grid sm:grid-cols-2 gap-3">
+                        <div class="flex items-start gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                            <span class="bg-indigo-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">1</span>
+                            <span class="text-sm text-slate-700">Menjelaskan pengertian teks rekon secara tepat.</span>
+                        </div>
+                        <div class="flex items-start gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                            <span class="bg-indigo-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">2</span>
+                            <span class="text-sm text-slate-700">Mengidentifikasi tujuan dan karakteristik utama teks rekon.</span>
+                        </div>
+                        <div class="flex items-start gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                            <span class="bg-indigo-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">3</span>
+                            <span class="text-sm text-slate-700">Membedakan jenis-jenis teks rekon (pribadi, faktual, imajinatif).</span>
+                        </div>
+                        <div class="flex items-start gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                            <span class="bg-indigo-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">4</span>
+                            <span class="text-sm text-slate-700">Mengidentifikasi struktur teks rekon (Orientasi, Peristiwa, Reorientasi).</span>
+                        </div>
+                        <div class="flex items-start gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                            <span class="bg-indigo-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">5</span>
+                            <span class="text-sm text-slate-700">Menganalisis kaidah kebahasaan (konjungsi temporal, kata kerja aksi, dll).</span>
+                        </div>
+                        <div class="flex items-start gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                            <span class="bg-indigo-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">6</span>
+                            <span class="text-sm text-slate-700">Menentukan informasi penting dan kronologi urutan peristiwa.</span>
+                        </div>
+                        <div class="flex items-start gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200 sm:col-span-2">
+                            <span class="bg-indigo-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">7</span>
+                            <span class="text-sm text-slate-700">Menyimpulkan isi serta menyusun teks rekon sederhana secara mandiri.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= HALAMAN MATERI (TABS INTERAKTIF) ================= -->
+        <section id="section-materi" class="hidden space-y-6">
+            <!-- Navigation Sub-Tabs -->
+            <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-3">
+                <button onclick="switchMateriTab('pengertian')" class="tab-btn active px-4 py-2.5 rounded-xl font-bold text-sm transition flex items-center gap-2">
+                    <i class="fa-solid fa-lightbulb"></i> Pengertian & Tujuan
+                </button>
+                <button onclick="switchMateriTab('jenis')" class="tab-btn px-4 py-2.5 rounded-xl font-bold text-sm transition flex items-center gap-2 bg-white text-slate-700 hover:bg-slate-100">
+                    <i class="fa-solid fa-layer-group"></i> Jenis-Jenis Rekon
+                </button>
+                <button onclick="switchMateriTab('struktur')" class="tab-btn px-4 py-2.5 rounded-xl font-bold text-sm transition flex items-center gap-2 bg-white text-slate-700 hover:bg-slate-100">
+                    <i class="fa-solid fa-sitemap"></i> Struktur Teks
+                </button>
+                <button onclick="switchMateriTab('kebahasaan')" class="tab-btn px-4 py-2.5 rounded-xl font-bold text-sm transition flex items-center gap-2 bg-white text-slate-700 hover:bg-slate-100">
+                    <i class="fa-solid fa-language"></i> Kaidah Kebahasaan
+                </button>
+                <button onclick="switchMateriTab('contoh')" class="tab-btn px-4 py-2.5 rounded-xl font-bold text-sm transition flex items-center gap-2 bg-white text-slate-700 hover:bg-slate-100">
+                    <i class="fa-solid fa-file-lines"></i> Contoh Teks Analisis
+                </button>
+            </div>
+
+            <!-- TAB 1: PENGERTIAN & TUJUAN -->
+            <div id="materi-pengertian" class="materi-content space-y-6">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-slate-200">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-3 bg-blue-100 text-blue-700 rounded-xl text-xl">
+                            <i class="fa-solid fa-book-bookmark"></i>
+                        </div>
+                        <h2 class="text-2xl font-heading font-bold text-slate-800">Apa Itu Teks Rekon?</h2>
+                    </div>
+                    <p class="text-slate-700 leading-relaxed text-base sm:text-lg mb-4">
+                        <strong>Teks Rekon (Recount Text)</strong> adalah jenis teks yang menceritakan kembali suatu peristiwa, tindakan, atau pengalaman yang telah terjadi di masa lalu secara berurutan (kronologis).
+                    </p>
+                    <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl my-4 text-amber-900 text-sm">
+                        <i class="fa-solid fa-note-sticky mr-1 text-amber-600"></i> <strong>Istilah Pintar:</strong> Kata "Rekon" berasal dari kata <em>recount</em> dalam bahasa Inggris yang berarti menceritakan kembali.
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200">
+                        <h3 class="font-heading font-bold text-lg text-indigo-900 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-bullseye text-indigo-600"></i> Tujuan Teks Rekon
+                        </h3>
+                        <ul class="space-y-2 text-sm text-slate-700 list-disc list-inside">
+                            <li><strong>Memberikan Informasi:</strong> Menyampaikan kejadian nyata atau sejarah kepada pembaca.</li>
+                            <li><strong>Menghibur Pembaca:</strong> Bagian dari cerita pengalaman pribadi yang berkesan atau lucu.</li>
+                            <li><strong>Merekam Sejarah:</strong> Mendokumentasikan peristiwa penting di masa lampau agar dapat dipelajari.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200">
+                        <h3 class="font-heading font-bold text-lg text-indigo-900 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-star text-yellow-500"></i> Ciri-Ciri Utama
+                        </h3>
+                        <ul class="space-y-2 text-sm text-slate-700">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Menceritakan kejadian masa lalu (lampau).</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Disusun secara urut waktu (kronologis).</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Menggunakan kata kerja aksi dan kata hubung waktu.</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Memiliki hubungan sebab-akibat antarperistiwa.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: JENIS-JENIS REKON -->
+            <div id="materi-jenis" class="materi-content hidden space-y-6">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-slate-200">
+                    <h2 class="text-2xl font-heading font-bold text-slate-800 mb-4">3 Jenis Teks Rekon</h2>
+                    <p class="text-slate-600 mb-6">Teks rekon dikelompokkan berdasarkan isi dan sifat peristiwa yang diceritakan:</p>
+
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <!-- Jenis 1 -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-2xl p-5 hover:shadow-lg transition">
+                            <div class="w-12 h-12 bg-blue-600 text-white rounded-xl flex items-center justify-center text-xl mb-3">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <h3 class="font-heading font-bold text-blue-900 text-lg mb-2">1. Rekon Pribadi</h3>
+                            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                                Teks yang memuat kejadian di mana penulisnya terlibat secara langsung.
+                            </p>
+                            <div class="mt-3 bg-white p-2.5 rounded-lg border border-blue-200 text-xs text-slate-600">
+                                <strong>Contoh:</strong> Pengalaman berlibur, buku harian, pengalaman pertama masuk SMP.
+                            </div>
+                        </div>
+
+                        <!-- Jenis 2 -->
+                        <div class="bg-purple-50 border border-purple-200 rounded-2xl p-5 hover:shadow-lg transition">
+                            <div class="w-12 h-12 bg-purple-600 text-white rounded-xl flex items-center justify-center text-xl mb-3">
+                                <i class="fa-solid fa-newspaper"></i>
+                            </div>
+                            <h3 class="font-heading font-bold text-purple-900 text-lg mb-2">2. Rekon Faktual (Informasional)</h3>
+                            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                                Teks yang memuat kejadian nyata, seperti laporan polisi, eksperimen ilmiah, atau berita.
+                            </p>
+                            <div class="mt-3 bg-white p-2.5 rounded-lg border border-purple-200 text-xs text-slate-600">
+                                <strong>Contoh:</strong> Laporan hasil penelitian laboratorium, liputan berita kecelakaan.
+                            </div>
+                        </div>
+
+                        <!-- Jenis 3 -->
+                        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 hover:shadow-lg transition">
+                            <div class="w-12 h-12 bg-amber-600 text-white rounded-xl flex items-center justify-center text-xl mb-3">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            </div>
+                            <h3 class="font-heading font-bold text-amber-900 text-lg mb-2">3. Rekon Imajinatif</h3>
+                            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                                Teks yang memuat cerita rekaan tentang peristiwa masa lalu dengan detail imajinatif secara rinci.
+                            </p>
+                            <div class="mt-3 bg-white p-2.5 rounded-lg border border-amber-200 text-xs text-slate-600">
+                                <strong>Contoh:</strong> Cerita petualangan penjelajah waktu, fiksi sejarah rekaan.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: STRUKTUR TEKS -->
+            <div id="materi-struktur" class="materi-content hidden space-y-6">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-slate-200">
+                    <h2 class="text-2xl font-heading font-bold text-slate-800 mb-2">Struktur Pembentuk Teks Rekon</h2>
+                    <p class="text-slate-600 mb-6 text-sm">Setiap teks rekon dibangun oleh 3 bagian utama secara berurutan:</p>
+
+                    <div class="space-y-4">
+                        <!-- Structure Item 1 -->
+                        <div class="flex flex-col sm:flex-row gap-4 p-5 bg-gradient-to-r from-blue-50 to-white rounded-2xl border border-blue-200">
+                            <div class="w-12 h-12 bg-blue-600 text-white rounded-xl flex items-center justify-center text-xl font-bold shrink-0">
+                                1
+                            </div>
+                            <div>
+                                <h3 class="font-heading font-bold text-blue-900 text-lg">Orientasi (Pengenalan)</h3>
+                                <p class="text-sm text-slate-700 mt-1">
+                                    Mengenalkan latar belakang informasi mengenai <strong>Siapa</strong> yang terlibat, <strong>Di mana</strong> kejadiannya, <strong>Kapan</strong> terjadi, dan <strong>Apa</strong> latar belakang peristiwa tersebut.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Structure Item 2 -->
+                        <div class="flex flex-col sm:flex-row gap-4 p-5 bg-gradient-to-r from-indigo-50 to-white rounded-2xl border border-indigo-200">
+                            <div class="w-12 h-12 bg-indigo-600 text-white rounded-xl flex items-center justify-center text-xl font-bold shrink-0">
+                                2
+                            </div>
+                            <div>
+                                <h3 class="font-heading font-bold text-indigo-900 text-lg">Urutan Peristiwa (Events)</h3>
+                                <p class="text-sm text-slate-700 mt-1">
+                                    Rangkaian kejadian yang diceritakan secara <strong>kronologis (berurutan waktu)</strong> dari tahap awal, pertengahan, hingga akhir peristiwa.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Structure Item 3 -->
+                        <div class="flex flex-col sm:flex-row gap-4 p-5 bg-gradient-to-r from-purple-50 to-white rounded-2xl border border-purple-200">
+                            <div class="w-12 h-12 bg-purple-600 text-white rounded-xl flex items-center justify-center text-xl font-bold shrink-0">
+                                3
+                            </div>
+                            <div>
+                                <h3 class="font-heading font-bold text-purple-900 text-lg">Reorientasi (Penutup / Kesimpulan)</h3>
+                                <p class="text-sm text-slate-700 mt-1">
+                                    Bagian penutup berupa kesan pribadi, pesan moral, komentar penulis, atau penyimpulan dari rangkaian peristiwa. <em>(Sifatnya opsional/pilihan)</em>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: KAIDAH KEBAHASAAN -->
+            <div id="materi-kebahasaan" class="materi-content hidden space-y-6">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-slate-200">
+                    <h2 class="text-2xl font-heading font-bold text-slate-800 mb-6">Kaidah Kebahasaan Teks Rekon</h2>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="p-4 border border-slate-200 rounded-xl bg-slate-50">
+                            <div class="font-bold text-blue-700 text-base mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-clock-rotate-left"></i> Konjungsi Temporal (Urutan Waktu)
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-600">Kata hubung yang menandai urutan waktu kejadian.</p>
+                            <span class="inline-block mt-2 bg-blue-100 text-blue-800 text-xs px-2.5 py-1 rounded-md font-semibold">
+                                Contoh: Setelah itu, kemudian, selanjutnya, sebelum, akhirnya.
+                            </span>
+                        </div>
+
+                        <div class="p-4 border border-slate-200 rounded-xl bg-slate-50">
+                            <div class="font-bold text-purple-700 text-base mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-person-running"></i> Kata Kerja Aksi (Verba Material)
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-600">Kata yang menunjukkan tindakan fisik secara nyata.</p>
+                            <span class="inline-block mt-2 bg-purple-100 text-purple-800 text-xs px-2.5 py-1 rounded-md font-semibold">
+                                Contoh: Mengunjungi, berjalan, mencatat, membaca, membawa.
+                            </span>
+                        </div>
+
+                        <div class="p-4 border border-slate-200 rounded-xl bg-slate-50">
+                            <div class="font-bold text-emerald-700 text-base mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-location-dot"></i> Keterangan Waktu & Tempat
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-600">Penunjuk kapan dan di mana peristiwa terjadi secara detail.</p>
+                            <span class="inline-block mt-2 bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-md font-semibold">
+                                Contoh: Kemarin pagi, di Museum Nasional, pada tahun 1945.
+                            </span>
+                        </div>
+
+                        <div class="p-4 border border-slate-200 rounded-xl bg-slate-50">
+                            <div class="font-bold text-amber-700 text-base mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-font"></i> Penggunaan Past Tense / Kalimat Lampau
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-600">Menggunakan bentuk kalimat yang mengindikasikan masa lalu.</p>
+                            <span class="inline-block mt-2 bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-md font-semibold">
+                                Contoh: Kami telah sampai, Rombongan berangkat jam 7.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 5: CONTOH TEKS ANALISIS -->
+            <div id="materi-contoh" class="materi-content hidden space-y-6">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-slate-200">
+                    <div class="flex items-center justify-between border-b pb-4 mb-4">
+                        <h2 class="text-xl font-heading font-bold text-slate-800">Contoh Teks Rekon Faktual Sejarah</h2>
+                        <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full">Analisis Struktur</span>
+                    </div>
+
+                    <!-- Text Sample with Color Coded Structure -->
+                    <div class="space-y-4">
+                        <!-- Orientasi -->
+                        <div class="p-4 bg-blue-50 border border-blue-200 rounded-xl relative">
+                            <span class="absolute top-3 right-3 bg-blue-600 text-white text-xs font-bold px-2.5 py-0.5 rounded">ORIENTASI</span>
+                            <h4 class="font-bold text-blue-900 mb-1">Peristiwa Proklamasi Kemerdekaan RI</h4>
+                            <p class="text-sm text-slate-700 leading-relaxed pt-2">
+                                Pada tanggal 17 Agustus 1945, terjadi peristiwa sejarah sangat penting bagi bangsa Indonesia, yaitu pembacaan Teks Proklamasi Kemerdekaan Indonesia. Peristiwa ini berlangsung di Jalan Pegangsaan Timur No. 56, Jakarta Pusat.
+                            </p>
+                        </div>
+
+                        <!-- Urutan Peristiwa -->
+                        <div class="p-4 bg-indigo-50 border border-indigo-200 rounded-xl relative space-y-2">
+                            <span class="absolute top-3 right-3 bg-indigo-600 text-white text-xs font-bold px-2.5 py-0.5 rounded">URUTAN PERISTIWA</span>
+                            <h4 class="font-bold text-indigo-900 mb-1">Rangkaian Kejadian</h4>
+                            <p class="text-sm text-slate-700 leading-relaxed">
+                                <strong>Pertama,</strong> pada dini hari tanggal 17 Agustus, Soekarno dan Hatta bersama tokoh pemuda menyusun naskah proklamasi di rumah Laksamana Maeda.
+                            </p>
+                            <p class="text-sm text-slate-700 leading-relaxed">
+                                <strong>Kemudian,</strong> naskah tersebut diketik oleh Sayuti Melik dengan beberapa perubahan kata.
+                            </p>
+                            <p class="text-sm text-slate-700 leading-relaxed">
+                                <strong>Tepat pukul 10.00 WIB,</strong> Ir. Soekarno didampingi Drs. Mohammad Hatta membacakan naskah proklamasi di hadapan masyarakat yang hadir. Diteruskan dengan pengibaran Sang Saka Merah Putih oleh Latief Hendraningrat dan Suhud.
+                            </p>
+                        </div>
+
+                        <!-- Reorientasi -->
+                        <div class="p-4 bg-purple-50 border border-purple-200 rounded-xl relative">
+                            <span class="absolute top-3 right-3 bg-purple-600 text-white text-xs font-bold px-2.5 py-0.5 rounded">REORIENTASI</span>
+                            <h4 class="font-bold text-purple-900 mb-1">Penutup</h4>
+                            <p class="text-sm text-slate-700 leading-relaxed pt-2">
+                                Peristiwa singkat tersebut menjadi tonggak sejarah yang menandai lahirnya negara Indonesia yang merdeka dan berdaulat. Kita sebagai generasi muda harus senantiasa menghargai jasa para pahlawan.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= HALAMAN SIMULASI INTERAKTIF ================= -->
+        <section id="section-aktivitas" class="hidden space-y-6">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-slate-200">
+                <div class="border-b pb-4 mb-6">
+                    <h2 class="text-2xl font-heading font-bold text-slate-800 flex items-center gap-3">
+                        <i class="fa-solid fa-gamepad text-purple-600"></i> Aktivitas Simulasi Interaktif
+                    </h2>
+                    <p class="text-slate-500 text-sm">Uji dan latih pemahamanmu melalui tantangan seret & susun berikut!</p>
+                </div>
+
+                <!-- Game Container: Drag and Drop Structure -->
+                <div class="space-y-6">
+                    <h3 class="font-heading font-bold text-lg text-indigo-900">Tantangan 1: Susun Urutan Struktur Teks Rekon</h3>
+                    <p class="text-sm text-slate-600">Klik / Pilih opsi jawaban yang tepat untuk melengkapi bagian struktur di bawah ini:</p>
+
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <!-- Dropzone 1 -->
+                        <div class="bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl p-4 text-center">
+                            <span class="text-xs font-bold uppercase text-slate-400 block mb-2">Langkah 1 (Awal)</span>
+                            <div id="target-1" class="min-h-[60px] flex items-center justify-center bg-white rounded-lg border p-2 text-sm font-semibold text-slate-700 shadow-sm">
+                                [ Bagian Pengenalan Tokoh, Waktu & Tempat ]
+                            </div>
+                            <button onclick="checkDragAnswer(1, 'Orientasi')" class="mt-3 text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-lg hover:bg-indigo-700 transition">Verifikasi</button>
+                        </div>
+
+                        <!-- Dropzone 2 -->
+                        <div class="bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl p-4 text-center">
+                            <span class="text-xs font-bold uppercase text-slate-400 block mb-2">Langkah 2 (Inti)</span>
+                            <div id="target-2" class="min-h-[60px] flex items-center justify-center bg-white rounded-lg border p-2 text-sm font-semibold text-slate-700 shadow-sm">
+                                [ Rangkaian Kejadian Kronologis ]
+                            </div>
+                            <button onclick="checkDragAnswer(2, 'Urutan Peristiwa')" class="mt-3 text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-lg hover:bg-indigo-700 transition">Verifikasi</button>
+                        </div>
+
+                        <!-- Dropzone 3 -->
+                        <div class="bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl p-4 text-center">
+                            <span class="text-xs font-bold uppercase text-slate-400 block mb-2">Langkah 3 (Penutup)</span>
+                            <div id="target-3" class="min-h-[60px] flex items-center justify-center bg-white rounded-lg border p-2 text-sm font-semibold text-slate-700 shadow-sm">
+                                [ Kesan Pribadi & Kesimpulan ]
+                            </div>
+                            <button onclick="checkDragAnswer(3, 'Reorientasi')" class="mt-3 text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-lg hover:bg-indigo-700 transition">Verifikasi</button>
+                        </div>
+                    </div>
+
+                    <!-- Choices Selection -->
+                    <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
+                        <span class="text-xs font-bold text-indigo-900 block mb-2">Pilihan Nama Struktur (Klik untuk Memilih):</span>
+                        <div class="flex flex-wrap gap-3">
+                            <button onclick="selectOption('Reorientasi')" class="choice-btn bg-white hover:bg-indigo-600 hover:text-white text-indigo-900 font-bold text-sm px-4 py-2 rounded-lg border border-indigo-200 shadow-sm transition">
+                                Reorientasi
+                            </button>
+                            <button onclick="selectOption('Orientasi')" class="choice-btn bg-white hover:bg-indigo-600 hover:text-white text-indigo-900 font-bold text-sm px-4 py-2 rounded-lg border border-indigo-200 shadow-sm transition">
+                                Orientasi
+                            </button>
+                            <button onclick="selectOption('Urutan Peristiwa')" class="choice-btn bg-white hover:bg-indigo-600 hover:text-white text-indigo-900 font-bold text-sm px-4 py-2 rounded-lg border border-indigo-200 shadow-sm transition">
+                                Urutan Peristiwa
+                            </button>
+                        </div>
+                        <p id="selected-info" class="text-xs text-indigo-700 mt-2 italic">Opsi terpilih: <span id="current-selected" class="font-bold">Belum ada</span></p>
+                    </div>
+
+                    <div id="sim-feedback" class="hidden p-3 rounded-lg text-sm font-bold text-center"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= HALAMAN KUIS EVALUASI ================= -->
+        <section id="section-kuis" class="hidden space-y-6">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-slate-200">
+                <!-- Quiz Header -->
+                <div class="flex justify-between items-center border-b pb-4 mb-6">
+                    <div>
+                        <h2 class="text-2xl font-heading font-bold text-slate-800">Kuis Evaluasi Teks Rekon</h2>
+                        <p class="text-slate-500 text-xs sm:text-sm">Jawablah pertanyaan di bawah ini untuk menguji pemahamanmu.</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs text-slate-400 block">Progres</span>
+                        <span id="quiz-progress" class="text-lg font-bold text-purple-600">Soal 1/5</span>
+                    </div>
+                </div>
+
+                <!-- Quiz Card Body -->
+                <div id="quiz-container" class="space-y-6">
+                    <!-- Question Title -->
+                    <h3 id="quiz-question" class="text-lg sm:text-xl font-heading font-bold text-slate-800 leading-snug">
+                        Loading pertanyaan...
+                    </h3>
+
+                    <!-- Answer Choices -->
+                    <div id="quiz-options" class="space-y-3">
+                        <!-- Options injected dynamically -->
+                    </div>
+
+                    <!-- Navigation Action Buttons -->
+                    <div class="flex justify-between items-center pt-4 border-t">
+                        <button id="prev-btn" onclick="prevQuestion()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded-xl font-bold text-sm hover:bg-slate-300 transition disabled:opacity-50">
+                            <i class="fa-solid fa-arrow-left mr-1"></i> Sebelumnya
+                        </button>
+                        <button id="next-btn" onclick="nextQuestion()" class="bg-purple-600 text-white px-5 py-2 rounded-xl font-bold text-sm hover:bg-purple-700 transition shadow">
+                            Selanjutnya <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Result Score Box (Hidden initially) -->
+                <div id="quiz-result" class="hidden text-center py-8 space-y-4">
+                    <div class="w-24 h-24 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center text-4xl mx-auto shadow-inner">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold text-slate-800">Hasil Evaluasi Belajar</h3>
+                    <p class="text-slate-600 text-sm">Selamat! Kamu telah menyelesaikan kuis interaktif.</p>
+                    <div class="text-5xl font-extrabold text-indigo-600 my-2" id="final-score">0</div>
+                    <p id="score-message" class="text-sm font-semibold text-slate-700"></p>
+                    <div class="pt-4">
+                        <button onclick="resetQuiz()" class="bg-indigo-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-indigo-700 transition shadow">
+                            <i class="fa-solid fa-rotate-right mr-1"></i> Coba Lagi
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= HALAMAN STUDIO PENULIS ================= -->
+        <section id="section-penulis" class="hidden space-y-6">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-slate-200">
+                <div class="border-b pb-4 mb-6">
+                    <h2 class="text-2xl font-heading font-bold text-slate-800 flex items-center gap-3">
+                        <i class="fa-solid fa-pen-nib text-emerald-600"></i> Studio Rekon: Susun Ceritamu
+                    </h2>
+                    <p class="text-slate-500 text-sm">Praktikkan pengetahuanmu dengan menyusun teks rekon pengalaman pribadi secara terbimbing.</p>
+                </div>
+
+                <form id="recount-builder" onsubmit="generateText(event)" class="space-y-5">
+                    <div>
+                        <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1">Judul Cerita / Peristiwa:</label>
+                        <input type="text" id="input-title" required placeholder="Contoh: Pengalaman Liburan Pertama ke Candi Borobudur" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm">
+                    </div>
+
+                    <!-- Step 1: Orientasi -->
+                    <div class="p-4 bg-blue-50/50 border border-blue-200 rounded-xl space-y-2">
+                        <label class="block text-sm font-bold text-blue-900">1. Orientasi (Pengenalan Siapa, Kapan, Di Mana):</label>
+                        <textarea id="input-orientasi" rows="3" required placeholder="Pada hari Minggu lalu, saya dan keluarga pergi mengunjungi..." class="w-full p-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                    </div>
+
+                    <!-- Step 2: Peristiwa -->
+                    <div class="p-4 bg-indigo-50/50 border border-indigo-200 rounded-xl space-y-2">
+                        <label class="block text-sm font-bold text-indigo-900">2. Urutan Peristiwa (Gunakan kata hubung: Pertama, Setelah itu, Kemudian):</label>
+                        <textarea id="input-events" rows="4" required placeholder="Pertama-tama kami membeli tiket masuk. Setelah itu, kami berjalan menaiki tangga candi..." class="w-full p-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+                    </div>
+
+                    <!-- Step 3: Reorientasi -->
+                    <div class="p-4 bg-purple-50/50 border border-purple-200 rounded-xl space-y-2">
+                        <label class="block text-sm font-bold text-purple-900">3. Reorientasi (Kesan & Penutup):</label>
+                        <textarea id="input-reorientasi" rows="2" placeholder="Pengalaman tersebut sangat berkesan bagi saya karena..." class="w-full p-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition shadow flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-file-export"></i> Hasilkan Teks Rekon Utuh
+                    </button>
+                </form>
+
+                <!-- Output Card Container -->
+                <div id="output-card" class="hidden mt-8 p-6 bg-slate-50 rounded-2xl border border-slate-300 space-y-4">
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <h3 class="font-heading font-bold text-slate-800 text-lg">Hasil Karya Teks Rekon Anda:</h3>
+                        <button onclick="copyToClipboard()" class="text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-lg hover:bg-indigo-700 transition">
+                            <i class="fa-solid fa-copy mr-1"></i> Salin Teks
+                        </button>
+                    </div>
+
+                    <div id="generated-result" class="prose max-w-none text-slate-800 text-sm sm:text-base leading-relaxed bg-white p-5 rounded-xl border">
+                        <!-- Result injected dynamically -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Container -->
+    <footer class="bg-slate-900 text-slate-400 text-xs sm:text-sm py-6 mt-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p>© 2026 Media Pembelajaran Interaktif (MPI) Bahasa Indonesia - Fase D / Kelas IX.</p>
+            <p class="text-slate-500">Dikembangkan untuk mendukung pembelajaran Teks Rekon berorientasi Kurikulum Merdeka.</p>
+        </div>
+    </footer>
+
+    <!-- Global JavaScript Implementation -->
+    <script>
+        // --- 1. SPA Navigation Logic ---
+        function navigateTo(sectionId) {
+            // Hide all sections
+            const sections = ['home', 'identitas', 'materi', 'aktivitas', 'kuis', 'penulis'];
+            sections.forEach(id => {
+                const el = document.getElementById('section-' + id);
+                if (el) el.classList.add('hidden');
+            });
+
+            // Show selected target section
+            const target = document.getElementById('section-' + sectionId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            // Close mobile menu if open
+            document.getElementById('mobile-menu').classList.add('hidden');
+
+            // Scroll to top smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Mobile Menu Toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // --- 2. Sub-Tabs Switching Logic for Material ---
+        function switchMateriTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.materi-content');
+            contents.forEach(c => c.classList.add('hidden'));
+
+            // Remove active style from tab buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active', 'bg-purple-600', 'text-white');
+                btn.classList.add('bg-white', 'text-slate-700');
+            });
+
+            // Show current active content
+            const activeContent = document.getElementById('materi-' + tabName);
+            if (activeContent) activeContent.classList.remove('hidden');
+
+            // Highlight clicked button
+            event.currentTarget.classList.add('active');
+            event.currentTarget.classList.remove('bg-white', 'text-slate-700');
+        }
+
+        // --- 3. Interactive Drag & Drop Simulation Logic ---
+        let selectedOption = null;
+
+        function selectOption(val) {
+            selectedOption = val;
+            document.getElementById('current-selected').innerText = val;
+        }
+
+        function checkDragAnswer(targetNum, expectedVal) {
+            const feedback = document.getElementById('sim-feedback');
+            const targetEl = document.getElementById('target-' + targetNum);
+
+            if (!selectedOption) {
+                feedback.className = "p-3 rounded-lg text-sm font-bold text-center bg-yellow-100 text-yellow-800";
+                feedback.innerText = "Pilih salah satu nama struktur di atas terlebih dahulu!";
+                feedback.classList.remove('hidden');
+                return;
+            }
+
+            if (selectedOption === expectedVal) {
+                targetEl.innerText = selectedOption;
+                targetEl.className = "min-h-[60px] flex items-center justify-center bg-emerald-100 border border-emerald-400 p-2 text-sm font-bold text-emerald-800 rounded-lg shadow-sm";
+                
+                feedback.className = "p-3 rounded-lg text-sm font-bold text-center bg-emerald-100 text-emerald-800";
+                feedback.innerText = "Tepat Sekali! " + selectedOption + " sesuai untuk langkah " + targetNum + ".";
+                feedback.classList.remove('hidden');
+            } else {
+                feedback.className = "p-3 rounded-lg text-sm font-bold text-center bg-rose-100 text-rose-800";
+                feedback.innerText = "Kurang tepat. Coba analisa kembali karakteristik struktur tersebut.";
+                feedback.classList.remove('hidden');
+            }
+        }
+
+        // --- 4. Interactive Quiz Logic ---
+        const quizData = [
+            {
+                question: "1. Manakah dari pilihan berikut yang merupakan pengertian utama dari Teks Rekon?",
+                options: [
+                    "Teks yang berisi petunjuk cara membuat sesuatu.",
+                    "Teks yang menceritakan kembali peristiwa masa lalu secara berurutan.",
+                    "Teks yang berisi pandangan opini penulis tentang isu sosial.",
+                    "Teks fiksi berisi dongeng rekaan masa depan."
+                ],
+                answer: 1
+            },
+            {
+                question: "2. Bagian struktur teks rekon yang mengenalkan tokoh, waktu, dan lokasi kejadian disebut...",
+                options: [
+                    "Reorientasi",
+                    "Koda",
+                    "Orientasi",
+                    "Komplikasi"
+                ],
+                answer: 2
+            },
+            {
+                question: "3. Kata hubung berikut yang termasuk konjungsi temporal dalam teks rekon adalah...",
+                options: [
+                    "Serta dan Dan",
+                    "Kemudian dan Setelah itu",
+                    "Tetapi dan Namun",
+                    "Sebab dan Karena"
+                ],
+                answer: 1
+            },
+            {
+                question: "4. Jenis teks rekon yang menceritakan pengalaman pribadi di mana penulis terlibat langsung disebut...",
+                options: [
+                    "Rekon Faktual",
+                    "Rekon Imajinatif",
+                    "Rekon Pribadi",
+                    "Rekon Ilmiah"
+                ],
+                answer: 2
+            },
+            {
+                question: "5. Bagian Reorientasi pada struktur teks rekon bersifat opsional, artinya...",
+                options: [
+                    "Wajib ada di setiap paragraf awal",
+                    "Boleh ada dan boleh tidak ada dalam teks",
+                    "Merupakan bagian paling utama dari teks",
+                    "Hanya boleh ditulis oleh guru"
+                ],
+                answer: 1
+            }
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+
+        function loadQuestion() {
+            const q = quizData[currentQuestion];
+            document.getElementById('quiz-progress').innerText = `Soal ${currentQuestion + 1}/${quizData.length}`;
+            document.getElementById('quiz-question').innerText = q.question;
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const isSelected = userAnswers[currentQuestion] === idx;
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-3.5 rounded-xl border text-sm font-semibold transition ${
+                    isSelected ? 'bg-purple-100 border-purple-500 text-purple-900' : 'bg-slate-50 border-slate-200 hover:bg-slate-100 text-slate-700'
+                }`;
+                btn.onclick = () => selectQuizAnswer(idx);
+                btn.innerHTML = `<span class="inline-block w-6 h-6 rounded-full border text-center text-xs leading-5 mr-2 ${isSelected ? 'bg-purple-600 text-white border-purple-600' : 'bg-white border-slate-300'}">${String.fromCharCode(65 + idx)}</span> ${opt}`;
+                optionsContainer.appendChild(btn);
+            });
+
+            // Handle Previous Button
+            document.getElementById('prev-btn').disabled = currentQuestion === 0;
+
+            // Handle Next/Finish Button Text
+            const nextBtn = document.getElementById('next-btn');
+            if (currentQuestion === quizData.length - 1) {
+                nextBtn.innerHTML = 'Selesaikan Kuis <i class="fa-solid fa-check ml-1"></i>';
+            } else {
+                nextBtn.innerHTML = 'Selanjutnya <i class="fa-solid fa-arrow-right ml-1"></i>';
+            }
+        }
+
+        function selectQuizAnswer(index) {
+            userAnswers[currentQuestion] = index;
+            loadQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showQuizResult();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+
+        function showQuizResult() {
+            let score = 0;
+            userAnswers.forEach((ans, idx) => {
+                if (ans === quizData[idx].answer) score += 20;
+            });
+
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('quiz-result').classList.remove('hidden');
+            document.getElementById('final-score').innerText = score;
+
+            const msg = document.getElementById('score-message');
+            if (score >= 80) {
+                msg.innerText = "Luar Biasa! Pemahamanmu tentang Teks Rekon sangat memuaskan!";
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            } else if (score >= 60) {
+                msg.innerText = "Bagus! Kamu sudah memahami dasar-dasar Teks Rekon dengan baik.";
+            } else {
+                msg.innerText = "Jangan berkecil hati! Pelajari kembali materi Teks Rekon lalu coba lagi kuisnya.";
+            }
+        }
+
+        function resetQuiz() {
+            currentQuestion = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        // Initialize quiz on load
+        loadQuestion();
+
+        // --- 5. Studio Rekon Text Builder Logic ---
+        function generateText(e) {
+            e.preventDefault();
+
+            const title = document.getElementById('input-title').value;
+            const orientasi = document.getElementById('input-orientasi').value;
+            const events = document.getElementById('input-events').value;
+            const reorientasi = document.getElementById('input-reorientasi').value;
+
+            const outputContainer = document.getElementById('generated-result');
+            outputContainer.innerHTML = `
+                <h2 class="text-xl font-bold text-center text-slate-900 border-b pb-2 mb-4">${title}</h2>
+                <div class="mb-3"><span class="text-xs font-bold bg-blue-100 text-blue-800 px-2 py-0.5 rounded">Orientasi</span> <p class="mt-1">${orientasi}</p></div>
+                <div class="mb-3"><span class="text-xs font-bold bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded">Urutan Peristiwa</span> <p class="mt-1">${events}</p></div>
+                ${reorientasi ? `<div class="mb-3"><span class="text-xs font-bold bg-purple-100 text-purple-800 px-2 py-0.5 rounded">Reorientasi</span> <p class="mt-1">${reorientasi}</p></div>` : ''}
+            `;
+
+            document.getElementById('output-card').classList.remove('hidden');
+        }
+
+        function copyToClipboard() {
+            const textContent = document.getElementById('generated-result').innerText;
+            const textarea = document.createElement('textarea');
+            textarea.value = textContent;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            alert('Teks rekon berhasil disalin ke clipboard!');
+        }
+    </script>
+</body>
+</html>
